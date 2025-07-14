@@ -3,11 +3,11 @@ import SearchResultsList from '@/components/search-results-list';
 import { search } from '@/lib/ytmusic';
 
 export default async function SearchPage({
-  searchParams,
+  params,
 }: {
-  searchParams?: { q?: string }
+  params?: { q?: string }
 }) {
-  const query = searchParams?.q || '';
+  const query = params?.q || '';
   const { songs, error } = await search(query);
 
   return (
