@@ -2,11 +2,6 @@ import SearchHeader from '@/components/search-header';
 import SearchResultsList from '@/components/search-results-list';
 import { search } from '@/lib/ytmusic';
 
-interface SearchPageProps {
-  searchParams: {
-    q?: string;
-  };
-}
 export default async function SearchPage({
   searchParams,
 }: {
