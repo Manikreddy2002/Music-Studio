@@ -267,59 +267,60 @@ export default function Player() {
       </div>
 
       {/* Mobile Player */}
-      <div className="lg:hidden h-full flex flex-col justify-center px-2 py-1">
-        <div className="flex items-center">
+      <div className="lg:hidden h-full flex flex-col justify-center px-1 py-0.5">
+        <div className="flex items-center gap-2 min-h-[56px]">
             {songToDisplay ? (
-              <Link href={`/track/${songToDisplay.id}`} className="flex items-center gap-3 flex-1 min-w-0">
+              <Link href={`/track/${songToDisplay.id}`} className="flex items-center gap-2 flex-1 min-w-0">
                 <Image 
-                  src={songToDisplay.image || 'https://placehold.co/48x48.png'} 
+                  src={songToDisplay.image || 'https://placehold.co/44x44.png'} 
                   data-ai-hint="album cover" 
                   alt="Album cover" 
-                  width={48} 
-                  height={48} 
-                  className="rounded" 
+                  width={44} 
+                  height={44} 
+                  className="rounded flex-shrink-0" 
                 />
                 <div className="min-w-0">
-                  <p className="font-semibold truncate text-sm">{songToDisplay.title}</p>
-                  <p className="text-xs text-zinc-400 truncate">{songToDisplay.artist}</p>
+                  <p className="font-semibold truncate text-sm leading-tight max-w-[120px]">{songToDisplay.title}</p>
+                  <p className="text-xs text-zinc-400 truncate leading-tight max-w-[120px]">{songToDisplay.artist}</p>
                 </div>
               </Link>
             ) : (
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-[48px] h-[48px] bg-zinc-800 rounded"></div>
+              <div className="flex items-center gap-2 flex-1 min-w-0">
+                <div className="w-[44px] h-[44px] bg-zinc-800 rounded" />
                 <div>
                   <p className="font-semibold text-sm">No song selected</p>
                 </div>
               </div>
             )}
-            <div className="flex items-center gap-3 pl-2">
+            <div className="flex items-center gap-1 pl-1">
                 <Popover>
                     <PopoverTrigger asChild>
-                        <button className="text-white p-1">
-                            <VolumeIcon size={24} />
+                        <button className="text-white p-1 rounded-full hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary">
+                            <VolumeIcon size={22} />
                         </button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-48 bg-zinc-800 border-zinc-700 text-white mb-2" side="top" align="center">
+                    <PopoverContent className="w-40 bg-zinc-800 border-zinc-700 text-white mb-2 p-2" side="top" align="center">
                         <Slider value={[volume]} onValueChange={([value]) => setVolume(value)} max={100} step={1} />
                     </PopoverContent>
                 </Popover>
                 {songToDisplay && (
-                    <button onClick={() => toggleLikeSong(songToDisplay)} className="text-white p-1">
-                        <Heart size={24} className={cn('transition', { 'fill-primary text-primary': isLiked(songToDisplay.id) })} />
+                    <button onClick={() => toggleLikeSong(songToDisplay)} className="text-white p-1 rounded-full hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary">
+                        <Heart size={22} className={cn('transition', { 'fill-primary text-primary': isLiked(songToDisplay.id) })} />
                     </button>
                 )}
-               <button onClick={handlePlayPause} disabled={!songToDisplay} className="text-white p-1 disabled:opacity-50">
-                 {isPlaying ? <Pause size={28} className="fill-white" /> : <Play size={28} className="fill-white" />}
+               <button onClick={handlePlayPause} disabled={!songToDisplay} className="text-white p-1 rounded-full hover:bg-zinc-800 focus:outline-none focus:ring-2 focus:ring-primary disabled:opacity-50">
+                 {isPlaying ? <Pause size={26} className="fill-white" /> : <Play size={26} className="fill-white" />}
                </button>
             </div>
         </div>
-         <div className="w-full px-1 mt-1">
+         <div className="w-full px-0.5 mt-0.5">
            <Slider 
               value={[isDisplayingRecent ? 0 : progress]}
               onValueChange={handleSliderChange}
               max={100} 
               step={1} 
               disabled={!activeSong} 
+              className="h-2"
             />
         </div>
       </div>

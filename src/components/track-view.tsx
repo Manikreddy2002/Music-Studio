@@ -61,97 +61,84 @@ export default function TrackView({ trackDetails }: TrackViewProps) {
   return (
     <>
       {/* Mobile Full-Screen Player View */}
-       <div className="md:hidden flex flex-col bg-gradient-to-b from-emerald-800 via-zinc-900 to-black text-white h-screen">
-        
-        <header className="relative z-10 flex items-center justify-between p-4 shrink-0">
-          <Button variant="ghost" size="icon" onClick={() => router.back()}>
-            <ChevronDown />
+       <div className="md:hidden relative flex flex-col bg-gradient-to-b from-emerald-800 via-zinc-900 to-black text-white h-screen">
+        {/* Optional: Blurred background using album art */}
+        <div className="absolute inset-0 -z-10 opacity-30 blur-xl" style={{backgroundImage: `url('${song.image || 'https://placehold.co/500x500.png'}')`, backgroundSize: 'cover', backgroundPosition: 'center'}} />
+        <header className="relative z-10 flex items-center justify-between px-2 py-2 shrink-0">
+          <Button variant="ghost" size="icon" onClick={() => router.back()} className="text-white">
+            <ChevronDown size={24} />
           </Button>
-          <div className="text-center">
-            <p className="text-xs text-zinc-400">PLAYING FROM ALBUM</p>
-            <p className="font-bold text-sm truncate max-w-48">{song.album}</p>
+          <div className="text-center flex-1">
+            <p className="text-xs text-zinc-300 truncate">{song.album}</p>
           </div>
-          <Button variant="ghost" size="icon">
-            <MoreVertical />
+          <Button variant="ghost" size="icon" className="text-white">
+            <MoreVertical size={24} />
           </Button>
         </header>
-        
-        <main className="flex-grow z-10 p-4 flex flex-col justify-between">
-          <div className="relative w-full aspect-square shadow-2xl">
-            <Image
-              src={song.image || 'https://placehold.co/500x500.png'}
-              alt={`Cover for ${song.title}`}
-              fill
-              sizes="100vw"
-              className="object-cover rounded-md"
-              data-ai-hint="song cover"
-            />
-          </div>
-
-          <div>
-            <div className="flex justify-between items-center">
-              <div className="min-w-0">
-                  <h2 className="text-2xl font-bold truncate">{song.title}</h2>
-                  <p className="text-zinc-300 truncate">{song.artist}</p>
+        <main className="flex-grow z-10 flex flex-col items-center justify-between px-4 pb-2">
+          <div className="w-full flex flex-col items-center mt-2">
+            <div className="relative w-3/4 max-w-xs aspect-square shadow-2xl rounded-xl overflow-hidden">
+              <Image
+                src={song.image || 'https://placehold.co/500x500.png'}
+                alt={`Cover for ${song.title}`}
+                fill
+                sizes="100vw"
+                className="object-cover rounded-xl shadow-lg"
+                data-ai-hint="song cover"
+              />
+            </div>
+            <div className="w-full flex items-center justify-between mt-4">
+              <div className="min-w-0 flex-1">
+                <h2 className="text-xl font-bold truncate">{song.title}</h2>
+                <p className="text-zinc-300 truncate text-sm">{song.artist}</p>
               </div>
               <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="shrink-0"
-                  onClick={() => toggleLikeSong(song)}
-                  disabled={!song.id}
+                variant="ghost" 
+                size="icon" 
+                className="shrink-0 ml-2"
+                onClick={() => toggleLikeSong(song)}
+                disabled={!song.id}
               >
-                  <Heart 
-                      size={28} 
-                      className={cn('transition', { 'fill-primary text-primary': isLiked(song.id) })}
-                  />
+                <Heart 
+                  size={26} 
+                  className={cn('transition', { 'fill-primary text-primary': isLiked(song.id) })}
+                />
               </Button>
             </div>
-
-
-            <div className="mt-4">
-              <Slider
-                value={[isCurrentlyPlayingSong ? progress : 0]}
-                onValueChange={handleSliderChange}
-                max={100}
-                step={1}
-                disabled={!activeSong}
-              />
-              <div className="flex justify-between text-xs text-zinc-400 mt-2">
-                  <span>{formatTime(isCurrentlyPlayingSong ? currentTime : 0)}</span>
-                  <span>{formatTime(song.duration)}</span>
-              </div>
+          </div>
+          <div className="w-full mt-2">
+            <Slider
+              value={[isCurrentlyPlayingSong ? progress : 0]}
+              onValueChange={handleSliderChange}
+              max={100}
+              step={1}
+              disabled={!activeSong}
+              className="h-2"
+            />
+            <div className="flex justify-between text-xs text-zinc-400 mt-1">
+              <span>{formatTime(isCurrentlyPlayingSong ? currentTime : 0)}</span>
+              <span>{formatTime(song.duration)}</span>
             </div>
-
-            <div className="flex items-center justify-between mt-2 text-white">
-              <Button variant="ghost" size="icon" onClick={toggleShuffle} className={cn('text-zinc-300 hover:text-white', { 'text-primary': isShuffled })}>
-                  <Shuffle size={24}/>
-              </Button>
-              <Button variant="ghost" size="icon" onClick={playPrevious} className="text-zinc-300 hover:text-white">
-                  <SkipBack size={32} fill="currentColor"/>
-              </Button>
-              <Button variant="ghost" size="icon" onClick={handlePlayPause} className="h-20 w-20 bg-white text-black rounded-full hover:bg-white/90">
-                  {isCurrentlyPlayingSong && isPlaying ? <Pause size={40} fill="currentColor" /> : <Play size={40} fill="currentColor" className="ml-1" />}
-              </Button>
-              <Button variant="ghost" size="icon" onClick={playNext} className="text-zinc-300 hover:text-white">
-                  <SkipForward size={32} fill="currentColor"/>
-              </Button>
-              <Button variant="ghost" size="icon" onClick={cycleRepeatMode} className={cn('text-zinc-300 hover:text-white', { 'text-primary': repeatMode !== 'none' })}>
-                  {repeatMode === 'one' ? <Repeat1 size={24} /> : <Repeat size={24} />}
-              </Button>
-            </div>
+          </div>
+          <div className="flex items-center justify-between w-full mt-2 mb-2 px-2">
+            <Button variant="ghost" size="icon" onClick={toggleShuffle} className={cn('text-zinc-300 hover:text-white', { 'text-primary': isShuffled })}>
+              <Shuffle size={22}/>
+            </Button>
+            <Button variant="ghost" size="icon" onClick={playPrevious} className="text-zinc-300 hover:text-white">
+              <SkipBack size={28} fill="currentColor"/>
+            </Button>
+            <Button variant="ghost" size="icon" onClick={handlePlayPause} className="h-16 w-16 bg-white text-black rounded-full hover:bg-white/90 flex items-center justify-center shadow-lg">
+              {isCurrentlyPlayingSong && isPlaying ? <Pause size={32} fill="currentColor" /> : <Play size={32} fill="currentColor" className="ml-1" />}
+            </Button>
+            <Button variant="ghost" size="icon" onClick={playNext} className="text-zinc-300 hover:text-white">
+              <SkipForward size={28} fill="currentColor"/>
+            </Button>
+            <Button variant="ghost" size="icon" onClick={cycleRepeatMode} className={cn('text-zinc-300 hover:text-white', { 'text-primary': repeatMode !== 'none' })}>
+              {repeatMode === 'one' ? <Repeat1 size={22} /> : <Repeat size={22} />}
+            </Button>
           </div>
         </main>
-        
-        <footer className="relative z-10 p-4 shrink-0">
-          <div className="flex items-center justify-between">
-              <Button variant="ghost" size="icon" className="text-zinc-300 hover:text-white">
-                <Share2 size={24} />
-              </Button>
-              <Button variant="ghost" size="icon" className="text-zinc-300 hover:text-white">
-                <PlusCircle size={24} />
-              </Button>
-          </div>
+        <footer className="relative z-10 px-2 pb-3 pt-1 shrink-0">
           <LyricsSection song={song} />
         </footer>
       </div>
